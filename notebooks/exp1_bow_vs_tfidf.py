@@ -92,7 +92,7 @@ df = df[x]
 df['sentiment'] = df['sentiment'].replace({'sadness':0, 'happiness':1})
 
 # Set the experiment name
-mlflow.set_experiment("Bow vs TfIdf")
+mlflow.set_experiment("Bow vs TfIdf01")
 
 # Define feature extraction methods
 vectorizers = {
