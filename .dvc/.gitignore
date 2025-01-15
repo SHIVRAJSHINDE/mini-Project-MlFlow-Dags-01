@@ -1,7 +1,3 @@
 /config.local
 /tmp
 /cache
-/reports/experiment_info.json
-/reports/metrics.json
-reports/experiment_info.json
-reports/metrics.json
