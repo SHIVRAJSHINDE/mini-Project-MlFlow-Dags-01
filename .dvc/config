@@ -1,2 +1,4 @@
+[core]
+    remote = myremote
 ['remote "myremote"']
-    url = C:\Users\SHIVRA~1\AppData\Local\Temp\shiv
+    url = s3://mlops-s3-bucket01
