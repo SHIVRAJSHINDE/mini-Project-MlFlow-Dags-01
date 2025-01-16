@@ -33,7 +33,7 @@ jobs:
       run: |
         dvc repro
 
-    -name: Run model_Tests
+    - name: Run model Tests
       env:
             DAGSHUB_PAT: ${{ secrets.DAGSHUB_PAT }}
       run: |
