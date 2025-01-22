@@ -48,11 +48,11 @@ jobs:
 
     - name: Build Docker image
       if : success()
-        docker build -t {{ secrets.DOCKER_HUB_USERNAME }}/emotion01:latest .
+        docker build -t {{ secrets.DOCKER_HUB_USERNAME }}/emotion02:latest .
 
     - name: Push Docker image
       if : success()
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/emotion01:latest
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/emotion02:latest
 
 
 
