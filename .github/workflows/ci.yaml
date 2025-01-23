@@ -58,16 +58,21 @@ jobs:
       if: success()
       uses: appleboy/ssh-action@v0.1.5
       with:
-        host: ${{ secrets.EC2_HOST}}
-        username: ${{ secrets.EC2_USER}}
-        key:  ${{ secrets.ECR_SSH_KEY}}
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.ECR_SSH_KEY }}
         script: |
+          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/emotion02:latest
+
           docker stop my-app || true
           docker rm my-app || true
+
           docker run -p 80:5000 --name my-app \
             -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT }} \
             ${{ secrets.DOCKER_HUB_USERNAME }}/emotion02:latest
+
 
       
 
