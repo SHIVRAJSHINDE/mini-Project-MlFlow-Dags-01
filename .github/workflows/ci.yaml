@@ -39,41 +39,23 @@ jobs:
       run: |
         python -m unittest tests/test_model.py
 
-    - name: login to Docker Hub
-      if: success()
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-    - name: Build Docker image
+    - name: Login to AWS ECR
+      run : |
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws ecr ger-login-password --region us-east-1 | docker login --username AWS --password-stdin 905418096737.dkr.ecr.us-east-1.amazonaws.com
+    
+    - name: Build Dicker Image
       run: |
-        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/emotion02:latest .
+        docker build -t shivraj-ecr .
 
-    - name: Push Docker image
+    - name: Tag Docker Image
       run: |
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/emotion02:latest
+        docker tag shivraj-ecr:latest 905418096737.dkr.ecr.us-east-1.amazonaws.com/shivraj-ecr:latest
 
-    - name: Deploy to EC2
-      if: success()
-      uses: appleboy/ssh-action@v0.1.5
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.ECR_SSH_KEY }}
-        script: |
-          docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/emotion02:latest
-
-          docker stop my-app || true
-          docker rm my-app || true
-
-          docker run -p 80:5000 --name my-app \
-            -e DAGSHUB_PAT=${{ secrets.DAGSHUB_PAT }} \
-            ${{ secrets.DOCKER_HUB_USERNAME }}/emotion02:latest
-
-
+    - name: Push Docker image AWS ECR 
+      run : |
+        docker push 905418096737.dkr.ecr.us-east-1.amazonaws.com/shivraj-ecr:latest
       
 
 
